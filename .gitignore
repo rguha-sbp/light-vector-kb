@@ -1,0 +1,49 @@
+# Python artifacts
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.swp
+*.tmp
+*.log
+*.coverage
+.coverage*
+.pytest_cache/
+
+# Environments
+.env
+.env.*
+.venv/
+venv/
+ENV/
+
+# UV
+uv.lock.backup
+uv.cache/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Editors/IDE
+.vscode/
+.idea/
+
+# Local data directories
+local_lancedb/
+local_documents/
+
+# Build/dist
+build/
+dist/
+*.egg-info/
+
+# Notebooks
+.ipynb_checkpoints/
+
+# Project-specific logs
+knowledge_base.log
+
+# Temporary files
+/tmp/
+*.bak

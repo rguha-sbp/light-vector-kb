@@ -1,0 +1,19 @@
+[project]
+name = "light-vector-kb"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "boto3>=1.26.0",
+    "PyPDF2>=3.0.0",
+    "docx2txt>=0.8",
+    "nltk>=3.8",
+    "loguru>=0.7.0",
+    "openpyxl>=3.1.0",
+    "PyYAML>=6.0",
+    "pandas>=2.3.3",
+    "pycryptodome>=3.23.0",
+    "pytest>=9.0.1",
+    "lancedb==0.25.0",
+]
