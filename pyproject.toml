@@ -17,3 +17,9 @@ dependencies = [
     "pytest>=9.0.1",
     "lancedb==0.25.0",
 ]
+
+[project.optional-dependencies]
+chatbot = [
+    "strands-agents>=1.18.0",
+    "streamlit>=1.51.0",
+]

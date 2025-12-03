@@ -1,0 +1,9 @@
+.app-header { margin-bottom: 1rem; }
+.app-header h1 { font-size: 1.6rem; margin: 0; }
+.app-header p { color: #6b7280; margin: 0.25rem 0 0; }
+
+/* Chat message tweaks */
+.stChatMessage { font-size: 0.95rem; }
+
+/* Sidebar */
+section[data-testid="stSidebar"] { min-width: 320px; }

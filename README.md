@@ -15,6 +15,23 @@ This repo is designed to run entirely in local mode by default, requiring no S3 
 
 ---
 
+**Supported Formats 📂**
+- Text: `txt`, `md`
+- Documents: `pdf`, `doc`, `docx`
+- Spreadsheets: `xlsx`
+- Structured: `json`, `yaml`
+
+You can drop these files into `local_documents/` (or configure S3) and the processor will detect, parse, chunk, and index them automatically.
+
+**LLM/Embedding Providers 🤖**
+- Embeddings: Amazon Bedrock (e.g., `amazon.titan-embed-text-v2:0`) with region control via `AWS_REGION`.
+- Chat/UI: Strands agent (LLM selection delegated to your AWS Bedrock setup via credentials/profile). Default behavior is local KB retrieval + agent response.
+
+Notes:
+- Additional providers (OpenAI, Azure, etc.) can be integrated later by swapping the embedding backend and agent config; the current repo focuses on AWS Bedrock.
+
+---
+
 **Quick Start 🧪**
 - Create a virtual environment and install deps:
 ```
@@ -160,6 +177,65 @@ uv run pytest -q
 ```
 Tests default to local mode and set temporary paths via `tests/conftest.py`.
 
+
+---
+
+**Install with uv (including chatbot extras) 📦**
+- Prerequisites: Python >= 3.12 and `uv` installed.
+- Create venv and install base deps:
+```
+uv venv --python 3.12
+.\.venv\Scripts\Activate.ps1
+uv sync --frozen || uv sync
+```
+- Install chatbot optional extras (Streamlit + Strands):
+```
+uv sync --all-extras
+```
+- Run the chatbot UI locally:
+```
+uv run streamlit run chatbot/app.py
+```
+
+
+AWS credentials for embeddings can be provided via:
+- Profiles (recommended):
+```
+$env:AWS_PROFILE = "myprofile"; $env:AWS_REGION = "eu-west-1"
+```
+- Direct keys (for temporary sessions):
+```
+$env:AWS_ACCESS_KEY_ID = "..."
+$env:AWS_SECRET_ACCESS_KEY = "..."
+$env:AWS_SESSION_TOKEN = "..."  # if using MFA/SSO
+$env:AWS_REGION = "eu-west-1"
+```
+
+---
+
+**Why this over AWS Vectors? 🆚**
+- **Hybrid Search**: Full‑text (BM25) + vector search in one query via LanceDB, improving relevance for both exact terms and semantic intent.
+- **Chunking Control**: Multiple strategies (`simple`, `hybrid`) with tunable sizes and overlap; you own the preprocessing, not a black box.
+- **Per‑Chunk Metadata**: Store rich metadata (source path, document hash, section headers) alongside embeddings for traceability and better reranking.
+- **Local‑First Performance**: No network hop for indexing/search; fast iteration and lower latency for development and small/medium deployments.
+- **Cost & Portability**: Avoids managed service costs and vendor lock‑in; data lives in your folders or S3 of your choice.
+- **Deterministic Re‑ingest**: Hash‑based idempotency ensures only changed documents are reprocessed, saving time and token and compute.
+
+Comparison snapshot:
+
+| Capability | Light Vector KB (LanceDB) | AWS Vectors (managed) |
+| --- | --- | --- |
+| Search Mode | Hybrid (BM25 + vectors) | Primarily vector; BM25 requires extra wiring |
+| Chunking | Pluggable strategies you control | Service‑side defaults; limited customization |
+| Metadata | Arbitrary per‑chunk fields | Vectors + limited attributes |
+| Hosting | Local or your S3 | Fully managed by AWS |
+| Latency | Local IO, very low | Network call overhead |
+| Cost | Infra you own; no per‑query fees | Managed pricing per storage/query |
+| Portability | Files + LanceDB; easy export | Tied to AWS service APIs |
+
+Notes:
+- You can still use AWS (Bedrock) for embeddings while keeping storage/search local with LanceDB.
+- For production scale or multi‑tenant setups, AWS managed vectors can simplify operations; this project optimizes for developer control and local performance.
 
 ---
 

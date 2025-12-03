@@ -16,9 +16,6 @@ from .embeddings import bedrock_embedding
 from .models import TextModel
 from config import C
 
-
-
-
 class DocumentProcessor:
     """Main class for processing documents from storage (S3 or local) and storing in LanceDB.
 
